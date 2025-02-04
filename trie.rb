@@ -35,10 +35,10 @@ end
 
 def can_segment_string(s, d)
   trie = Trie.new
-  d.each { |word| trie.insert(word) }
+  s.downcase!
+  d.each { |word| trie.insert(word.downcase) }
   n = s.length
   dp = Array.new(n + 1, false)
-  dp[0] = true
 
   node = trie.root
   (1..n).each do |i|
@@ -46,7 +46,7 @@ def can_segment_string(s, d)
       char = s[j]
       if node.children[char]
         node = node.children[char]
-        if node.is_end_of_word #&& dp[j]
+        if node.is_end_of_word
           dp[i] = true
           node = trie.root
           break
@@ -60,32 +60,52 @@ def can_segment_string(s, d)
   dp[n]
 end
 
+s = 'модернистский роман ирландского писателя Джеймса Джойса Улиcc'
+d = %w[модернистский роман ирландского писателя джеймса джойса улисс]
+result = can_segment_string(s, d)
+puts result # false
+
+s = 'модернистский роман ирландского писателя Джеймса Джойса Улисс'
+d = %w[модернистский роман ирландского писателя джеймса джойса улисс]
+result = can_segment_string(s, d)
+puts result # true
+
+s = 'дoсотентысяч'
+d = %w[дo сотен тысяч]
+result = can_segment_string(s, d)
+puts result # true
+
 s = 'двесотни'
 d = %w[две сотни тысячи]
 result = can_segment_string(s, d)
-puts result
+puts result # true
 
 s2 = 'двесотня'
 d2 = %w[две сотня тысячи]
 result2 = can_segment_string(s2, d2)
-puts result2
+puts result2 # true
 
 s3 = 'дветысячи'
 d3 = %w[две сотня тысячи]
 result3 = can_segment_string(s3, d3)
-puts result3
+puts result3 # true
 
 s3 = 'двесотни'
 d3 = %w[две сотня тысячи]
 result3 = can_segment_string(s3, d3)
-puts result3
+puts result3 # false
 
 s3 = 'сотня'
 d3 = %w[две сотня тысячи]
 result3 = can_segment_string(s3, d3)
-puts result3
+puts result3 # true
 
 s3 = 'две сотня тысяч'
 d3 = %w[две сотня тысячи]
 result3 = can_segment_string(s3, d3)
-puts result3
+puts result3 # false
+
+s3 = 'две сотня тысяч'
+d3 = %w[две сотня тысяч]
+result3 = can_segment_string(s3, d3)
+puts result3 # true
