@@ -8,6 +8,8 @@ class TrieNode
 end
 
 class Trie
+  attr_accessor :root
+
   def initialize
     @root = TrieNode.new
   end
@@ -38,14 +40,15 @@ def can_segment_string(s, d)
   dp = Array.new(n + 1, false)
   dp[0] = true
 
+  node = trie.root
   (1..n).each do |i|
-    node = trie.root
     (i - 1).downto(0) do |j|
       char = s[j]
       if node.children[char]
         node = node.children[char]
-        if node.is_end_of_word && dp[j]
+        if node.is_end_of_word #&& dp[j]
           dp[i] = true
+          node = trie.root
           break
         end
       else
@@ -57,13 +60,32 @@ def can_segment_string(s, d)
   dp[n]
 end
 
-s = "двесотни"
+s = 'двесотни'
 d = %w[две сотни тысячи]
 result = can_segment_string(s, d)
 puts result
 
-# Другой пример
-s2 = "двесотня"
+s2 = 'двесотня'
 d2 = %w[две сотня тысячи]
 result2 = can_segment_string(s2, d2)
 puts result2
+
+s3 = 'дветысячи'
+d3 = %w[две сотня тысячи]
+result3 = can_segment_string(s3, d3)
+puts result3
+
+s3 = 'двесотни'
+d3 = %w[две сотня тысячи]
+result3 = can_segment_string(s3, d3)
+puts result3
+
+s3 = 'сотня'
+d3 = %w[две сотня тысячи]
+result3 = can_segment_string(s3, d3)
+puts result3
+
+s3 = 'две сотня тысяч'
+d3 = %w[две сотня тысячи]
+result3 = can_segment_string(s3, d3)
+puts result3
